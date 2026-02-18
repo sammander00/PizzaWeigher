@@ -261,6 +261,18 @@
             font-weight: bold;
         }
 
+        .pizza-item.weighed-today .pizza-name {
+            color: #00FE00;
+            /* Green */
+        }
+
+        .pizza-item.weighed-today .pizza-status {
+            color: #00FE00;
+            /* Green */
+            font-weight: bold;
+        }
+
+
         .pizza-times {
             font-size: 0.8rem;
             color: #888;
@@ -926,6 +938,7 @@
             if (lastWeighed && isToday(lastWeighed)) {
                 button.textContent = 'Undo Today';
                 button.classList.add('weighed');
+                item.classList.add('weighed-today');
             } else {
                 button.textContent = 'Mark as Weighed';
 
