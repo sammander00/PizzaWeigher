@@ -88,10 +88,13 @@
 
         /* Staff Grid - Minimalist Cards */
         .staff-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 40px;
-            padding: 0 20px;
+            padding: 0 10px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .staff-btn {
@@ -99,9 +102,9 @@
             border: 2px solid #FE0000;
             color: #FE0000;
             font-family: 'Pirata One', cursive;
-            font-size: 2rem;
-            padding: 20px;
-            aspect-ratio: 1;
+            font-size: 2.2rem;
+            width: 230px;
+            height: 230px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -338,10 +341,33 @@
         }
 
         .leaderboard-top {
-            border: 1px solid #FE0000;
-            box-shadow: 0 0 12px rgba(254, 0, 0, 0.3);
+            border: 2px solid #FE0000;
             background: #0f0000;
+            animation: fire-pulse 2s infinite alternate linear;
+            position: relative;
+            z-index: 1;
         }
+
+        @keyframes fire-pulse {
+            0% {
+                box-shadow: 0 0 15px rgba(254, 0, 0, 0.6), 0 0 5px rgba(255, 215, 0, 0.4);
+                border-color: #FE0000;
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(255, 94, 0, 0.8), 0 -5px 15px rgba(255, 215, 0, 0.6);
+                border-color: #ff5e00;
+                transform: scale(1.02);
+            }
+
+            100% {
+                box-shadow: 0 0 15px rgba(254, 0, 0, 0.6), 0 0 5px rgba(255, 215, 0, 0.4);
+                border-color: #FE0000;
+                transform: scale(1);
+            }
+        }
+
 
         .leaderboard-rank {
             font-weight: 900;
