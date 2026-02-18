@@ -125,20 +125,24 @@
 
         /* Pizza List Layout */
         .pizza-header {
+            position: relative;
             display: flex;
-            justify-content: space-between;
-            align-items: baseline;
+            justify-content: center;
+            align-items: center;
             margin-bottom: 50px;
             border-bottom: 1px solid #E1D8B7;
-            /* --hell-parchment */
             padding-bottom: 20px;
+            min-height: 80px;
         }
 
         .back-btn {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
             background: transparent;
             border: none;
             color: #E1D8B7;
-            /* --hell-parchment */
             font-family: 'Roboto', sans-serif;
             font-size: 0.9rem;
             font-weight: 700;
@@ -156,8 +160,9 @@
 
         .current-staff {
             font-family: 'Pirata One', cursive;
-            font-size: 3.2rem;
+            font-size: 4.5rem;
             color: #E1D8B7;
+            text-align: center;
         }
 
         #currentStaffName {
