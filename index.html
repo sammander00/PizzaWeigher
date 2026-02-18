@@ -40,8 +40,8 @@
         /* Header & Logo */
         .header {
             text-align: center;
-            margin-bottom: 60px;
-            padding-bottom: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
         }
 
         .logo-img {
@@ -403,15 +403,187 @@
             width: 0 !important;
             pointer-events: none !important;
         }
+
+        /* --- Developer Menu --- */
+        .dev-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dev-overlay.active {
+            display: flex;
+        }
+
+        .dev-modal {
+            background: #0a0a0a;
+            border: 1px solid #FE0000;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .dev-title {
+            font-family: 'Pirata One', cursive;
+            color: #FE0000;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 3px;
+        }
+
+        .dev-section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
+        }
+
+        .dev-section-title {
+            color: #E1D8B7;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .dev-btn {
+            background: transparent;
+            border: 1px solid #FE0000;
+            color: #FE0000;
+            padding: 10px 20px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .dev-btn:hover {
+            background: #FE0000;
+            color: #000;
+        }
+
+        .dev-btn.secondary {
+            border-color: #555;
+            color: #555;
+        }
+
+        .dev-btn.secondary:hover {
+            background: #555;
+            color: #000;
+        }
+
+        .dev-btn.danger {
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        .dev-btn.danger:hover {
+            background: #ff4444;
+            color: #000;
+        }
+
+        .dev-input {
+            background: #111;
+            border: 1px solid #333;
+            color: #E1D8B7;
+            padding: 10px;
+            width: 100%;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .dev-staff-list {
+            margin-bottom: 10px;
+        }
+
+        .dev-staff-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+            font-size: 0.9rem;
+        }
+
+        .dev-remove-btn {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 3px 10px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .dev-pin-screen {
+            text-align: center;
+        }
+
+        .dev-pin-display {
+            font-size: 2rem;
+            letter-spacing: 8px;
+            color: #FE0000;
+            margin: 20px 0;
+            min-height: 40px;
+        }
+
+        .dev-pin-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 250px;
+            margin: 0 auto;
+        }
+
+        .dev-pin-btn {
+            background: #111;
+            border: 1px solid #333;
+            color: #E1D8B7;
+            padding: 15px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-family: 'Roboto', sans-serif;
+            transition: all 0.15s;
+        }
+
+        .dev-pin-btn:hover {
+            background: #222;
+        }
+
+        .dev-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #555;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <!-- Header -->
-        <header class="header"> <!-- SVG Scales & Pizza Logo -->
-            <svg width="220" height="160" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg" class="logo-img"
-                style="display:block;margin:0 auto;">
+        <header class="header">
+            <!-- SVG Scales & Pizza Logo - tap 5x to open dev menu -->
+            <svg id="devLogoTrigger" width="220" height="160" viewBox="0 0 220 160" xmlns="http://www.w3.org/2000/svg"
+                class="logo-img" style="display:block;margin:0 auto;cursor:pointer;">
                 <rect x="107" y="40" width="6" height="110" fill="#E1D8B7" rx="3" />
                 <rect x="75" y="148" width="70" height="6" fill="#E1D8B7" rx="3" />
                 <rect x="20" y="52" width="180" height="5" fill="#E1D8B7" rx="2" />
@@ -427,42 +599,97 @@
                 <circle cx="174" cy="93" r="3" fill="#FE0000" />
                 <circle cx="170" cy="104" r="3" fill="#FE0000" />
             </svg>
-            <p class="subtitle">Pizza Weighing</p>
         </header>
+    </div>
 
-        <!-- Staff Selection Screen -->
-        <div id="staffScreen" class="screen active">
-            <h2 class="screen-title">Select Name</h2>
-            <div class="staff-grid">
-                <button class="staff-btn" data-staff="Sam">Sam</button>
-                <button class="staff-btn" data-staff="Fox">Fox</button>
-                <button class="staff-btn" data-staff="Ash">Ash</button>
-                <button class="staff-btn" data-staff="Cam">Cam</button>
-                <button class="staff-btn" data-staff="Dave">Dave</button>
-                <button class="staff-btn" data-staff="Toby">Toby</button>
-                <button class="staff-btn" data-staff="Kahn">Kahn</button>
-            </div>
+    <!-- Developer Menu Overlay -->
+    <div class="dev-overlay" id="devOverlay">
+        <div class="dev-modal" style="position:relative;">
+            <button class="dev-close" onclick="closeDev()">✕</button>
 
-            <!-- Leaderboard Section -->
-            <div class="leaderboard-section">
-                <h3 class="leaderboard-title">Top Pizza Weighers</h3>
-                <div id="leaderboardList" class="leaderboard-list">
-                    <!-- Leaderboard items will be generated by JS -->
+            <!-- PIN Screen -->
+            <div id="devPinScreen" class="dev-pin-screen">
+                <div class="dev-title">🔒 Dev Menu</div>
+                <div class="dev-pin-display" id="devPinDisplay">_ _ _ _</div>
+                <div class="dev-pin-grid">
+                    <button class="dev-pin-btn" onclick="devPinPress('1')">1</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('2')">2</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('3')">3</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('4')">4</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('5')">5</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('6')">6</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('7')">7</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('8')">8</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('9')">9</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('back')">⌫</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('0')">0</button>
+                    <button class="dev-pin-btn" onclick="devPinPress('clear')">C</button>
                 </div>
-            </div>
-        </div>
-
-        <!-- Pizza Weighing Screen -->
-        <div id="pizzaScreen" class="screen">
-            <div class="pizza-header">
-                <button id="backBtn" class="back-btn">Back to Staff</button>
-                <h2 class="current-staff">Staff: <span id="currentStaffName"></span></h2>
+                <p style="color:#555;font-size:0.75rem;margin-top:20px;">Enter PIN to continue</p>
             </div>
 
-            <div class="pizza-list" id="pizzaList">
-                <!-- Pizza items will be generated by JavaScript -->
+            <!-- Main Dev Menu (hidden until PIN correct) -->
+            <div id="devMenuMain" style="display:none;">
+                <div class="dev-title">⚙️ Dev Menu</div>
+
+                <!-- Data Backup -->
+                <div class="dev-section">
+                    <div class="dev-section-title">📦 Data Backup</div>
+                    <button class="dev-btn" onclick="devExportData()">Export Data (Copy to Clipboard)</button>
+                    <button class="dev-btn secondary" onclick="devImportData()">Import / Restore Data</button>
+                    <button class="dev-btn danger" onclick="devClearData()">⚠️ Clear All Data</button>
+                </div>
+
+                <!-- Staff Management -->
+                <div class="dev-section">
+                    <div class="dev-section-title">👤 Staff Management</div>
+                    <div class="dev-staff-list" id="devStaffList"></div>
+                    <div style="display:flex;gap:10px;">
+                        <input class="dev-input" id="devNewStaffInput" placeholder="New staff name..."
+                            style="margin-bottom:0;" />
+                        <button class="dev-btn" style="width:auto;white-space:nowrap;margin-bottom:0;"
+                            onclick="devAddStaff()">Add</button>
+                    </div>
+                </div>
+
+                <button class="dev-btn secondary" onclick="closeDev()">Close</button>
             </div>
         </div>
+    </div>
+
+    <!-- Staff Selection Screen -->
+    <div id="staffScreen" class="screen active">
+        <h2 class="screen-title">Select Name</h2>
+        <div class="staff-grid">
+            <button class="staff-btn" data-staff="Sam">Sam</button>
+            <button class="staff-btn" data-staff="Fox">Fox</button>
+            <button class="staff-btn" data-staff="Ash">Ash</button>
+            <button class="staff-btn" data-staff="Cam">Cam</button>
+            <button class="staff-btn" data-staff="Dave">Dave</button>
+            <button class="staff-btn" data-staff="Toby">Toby</button>
+            <button class="staff-btn" data-staff="Kahn">Kahn</button>
+        </div>
+
+        <!-- Leaderboard Section -->
+        <div class="leaderboard-section">
+            <h3 class="leaderboard-title">Top Pizza Weighers</h3>
+            <div id="leaderboardList" class="leaderboard-list">
+                <!-- Leaderboard items will be generated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Pizza Weighing Screen -->
+    <div id="pizzaScreen" class="screen">
+        <div class="pizza-header">
+            <button id="backBtn" class="back-btn">Back to Staff</button>
+            <h2 class="current-staff">Staff: <span id="currentStaffName"></span></h2>
+        </div>
+
+        <div class="pizza-list" id="pizzaList">
+            <!-- Pizza items will be generated by JavaScript -->
+        </div>
+    </div>
     </div>
 
     <!-- Inlined Application Logic -->
@@ -542,8 +769,13 @@
             return Math.floor(diffTime / (1000 * 60 * 60 * 24));
         }
 
-        // Staff list
-        const STAFF = ['Sam', 'Fox', 'Ash', 'Cam', 'Dave', 'Toby', 'Kahn'];
+        // Staff list - loaded from localStorage so dev menu changes persist
+        const DEFAULT_STAFF = ['Sam', 'Fox', 'Ash', 'Cam', 'Dave', 'Toby', 'Kahn'];
+        let STAFF = JSON.parse(localStorage.getItem('hell_staff_list') || 'null') || DEFAULT_STAFF;
+
+        function saveStaffList() {
+            localStorage.setItem('hell_staff_list', JSON.stringify(STAFF));
+        }
 
         // Current state
         let currentStaff = null;
@@ -871,6 +1103,159 @@
 
         // Initialize the app when DOM is ready
         document.addEventListener('DOMContentLoaded', init);
+
+        // ===== DEVELOPER MENU =====
+        const DEV_PIN = '1337';
+        let devTapCount = 0;
+        let devTapTimer = null;
+        let devPinEntry = '';
+
+        // 5-tap logo trigger
+        document.getElementById('devLogoTrigger').addEventListener('click', () => {
+            devTapCount++;
+            clearTimeout(devTapTimer);
+            devTapTimer = setTimeout(() => { devTapCount = 0; }, 2000);
+            if (devTapCount >= 5) {
+                devTapCount = 0;
+                openDev();
+            }
+        });
+
+        function openDev() {
+            devPinEntry = '';
+            document.getElementById('devPinDisplay').textContent = '_ _ _ _';
+            document.getElementById('devPinScreen').style.display = 'block';
+            document.getElementById('devMenuMain').style.display = 'none';
+            document.getElementById('devOverlay').classList.add('active');
+        }
+
+        function closeDev() {
+            document.getElementById('devOverlay').classList.remove('active');
+            devPinEntry = '';
+        }
+
+        function devPinPress(val) {
+            if (val === 'clear') { devPinEntry = ''; }
+            else if (val === 'back') { devPinEntry = devPinEntry.slice(0, -1); }
+            else if (devPinEntry.length < 4) { devPinEntry += val; }
+
+            // Update display
+            const dots = devPinEntry.split('').map(() => '●').join(' ');
+            const blanks = Array(4 - devPinEntry.length).fill('_').join(' ');
+            document.getElementById('devPinDisplay').textContent = (dots + (dots && blanks ? ' ' : '') + blanks).trim();
+
+            // Check PIN
+            if (devPinEntry.length === 4) {
+                if (devPinEntry === DEV_PIN) {
+                    document.getElementById('devPinScreen').style.display = 'none';
+                    document.getElementById('devMenuMain').style.display = 'block';
+                    renderDevStaffList();
+                } else {
+                    document.getElementById('devPinDisplay').textContent = '✕ Wrong PIN';
+                    setTimeout(() => {
+                        devPinEntry = '';
+                        document.getElementById('devPinDisplay').textContent = '_ _ _ _';
+                    }, 1000);
+                }
+            }
+        }
+
+        function devExportData() {
+            const data = loadData();
+            const exportObj = { staff: STAFF, data: data, exportedAt: new Date().toISOString() };
+            const json = JSON.stringify(exportObj, null, 2);
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(json).then(() => alert('✅ Data copied to clipboard!\n\nPaste it into a text file to save it.'));
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = json;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                alert('✅ Data copied to clipboard!');
+            }
+        }
+
+        function devImportData() {
+            const json = prompt('Paste your backup JSON here:');
+            if (!json) return;
+            try {
+                const obj = JSON.parse(json);
+                if (obj.data) {
+                    localStorage.setItem('hell_pizza_data', JSON.stringify(obj.data));
+                }
+                if (obj.staff && Array.isArray(obj.staff)) {
+                    STAFF.length = 0;
+                    obj.staff.forEach(s => STAFF.push(s));
+                    saveStaffList();
+                }
+                alert('✅ Data restored! Reloading app...');
+                location.reload();
+            } catch (e) {
+                alert('❌ Invalid JSON. Please check your backup and try again.');
+            }
+        }
+
+        function devClearData() {
+            if (confirm('⚠️ This will DELETE all weighing data for all staff.\n\nAre you sure?')) {
+                if (confirm('Really sure? This cannot be undone.')) {
+                    localStorage.removeItem('hell_pizza_data');
+                    alert('All data cleared.');
+                    location.reload();
+                }
+            }
+        }
+
+        function renderDevStaffList() {
+            const list = document.getElementById('devStaffList');
+            list.innerHTML = '';
+            STAFF.forEach((name, i) => {
+                const item = document.createElement('div');
+                item.className = 'dev-staff-item';
+                item.innerHTML = `<span>${name}</span><button class="dev-remove-btn" onclick="devRemoveStaff(${i})">Remove</button>`;
+                list.appendChild(item);
+            });
+        }
+
+        function devAddStaff() {
+            const input = document.getElementById('devNewStaffInput');
+            const name = input.value.trim();
+            if (!name) return;
+            if (STAFF.includes(name)) { alert('That name already exists.'); return; }
+            STAFF.push(name);
+            saveStaffList();
+            input.value = '';
+            renderDevStaffList();
+            refreshStaffButtons();
+        }
+
+        function devRemoveStaff(index) {
+            const name = STAFF[index];
+            if (!confirm(`Remove "${name}" from the staff list?\n\nTheir weighing data will be kept.`)) return;
+            STAFF.splice(index, 1);
+            saveStaffList();
+            renderDevStaffList();
+            refreshStaffButtons();
+        }
+
+        function refreshStaffButtons() {
+            const grid = document.querySelector('.staff-grid');
+            grid.innerHTML = '';
+            STAFF.forEach(name => {
+                const btn = document.createElement('button');
+                btn.className = 'staff-btn';
+                btn.dataset.staff = name;
+                btn.textContent = name;
+                btn.addEventListener('click', () => {
+                    currentStaff = name;
+                    document.getElementById('currentStaffName').textContent = name;
+                    loadPizzaScreen(name);
+                    showPizzaScreen();
+                });
+                grid.appendChild(btn);
+            });
+        }
     </script>
 </body>
 
