@@ -235,8 +235,30 @@
         }
 
         .weigh-btn.weighed {
-            border-color: #333;
-            color: #333;
+            animation: button-flame 1s infinite alternate;
+            border-width: 2px;
+            color: #E1D8B7;
+            text-shadow: 0 0 5px #000;
+        }
+
+        @keyframes button-flame {
+            0% {
+                box-shadow: 0 0 8px rgba(254, 0, 0, 0.6), inset 0 0 8px rgba(254, 0, 0, 0.4);
+                border-color: #FE0000;
+                background: rgba(254, 0, 0, 0.1);
+            }
+
+            50% {
+                box-shadow: 0 0 15px rgba(255, 94, 0, 0.8), inset 0 0 12px rgba(255, 94, 0, 0.5);
+                border-color: #ff5e00;
+                background: rgba(255, 94, 0, 0.2);
+            }
+
+            100% {
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.6), inset 0 0 10px rgba(255, 215, 0, 0.4);
+                border-color: #FFD700;
+                background: rgba(255, 215, 0, 0.1);
+            }
         }
 
         /* Stale Pizza - Design Led (Border removed) */
