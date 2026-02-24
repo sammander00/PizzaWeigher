@@ -766,13 +766,30 @@
     <script>
         // Hell Pizza Weighing Tracker App
 
-        // Pizza menu list
+        // Base pizza menu (always available)
         const PIZZAS = [
             'Beast', 'Brimstone', 'Buffalo', 'Burger Pizza', 'Cursed', 'Damned',
             'Death By Chicken', 'Envy', 'Gluttony', 'Greed', 'Grimm', 'Limbo',
             'Lust/Deluxe', 'Mayhem', 'Mischief', 'Mordor', 'Morning After', 'Pandemonium',
             'Pride', 'Purgatory', 'Serpent', 'Sinister', 'Trouble', 'Unearthly', 'Wrath'
         ];
+
+        // Scheduled updates (pizzas that appear automatically at a certain time)
+        // Format: { name: 'Pizza Name', releaseDate: 'YYYY-MM-DDTHH:MM:SS+13:00' }
+        const SCHEDULED_PIZZAS = [
+            { name: 'Peoples Pizza', releaseDate: '2026-02-27T10:00:00+13:00' }
+        ];
+
+        // Get all currently available pizzas (Base + Scheduled that have passed their release date)
+        function getActivePizzas() {
+            const now = new Date();
+            const releasedPizzas = SCHEDULED_PIZZAS
+                .filter(p => new Date(p.releaseDate) <= now)
+                .map(p => p.name);
+
+            // Merge and sort alphabetically
+            return [...PIZZAS, ...releasedPizzas].sort();
+        }
 
         // ===== GOOGLE SHEETS SYNC CONFIG =====
         const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbx-VRjPjFI1zn26kp2_SYdgWesVz2mtfPr0pPR41BJPMwsLjHrmDAPMK4ZNPiw0tJik/exec';
@@ -960,7 +977,8 @@
         function renderPizzaList() {
             pizzaList.innerHTML = '';
 
-            PIZZAS.forEach(pizza => {
+            const activePizzas = getActivePizzas();
+            activePizzas.forEach(pizza => {
                 const pizzaItem = createPizzaItem(pizza);
                 pizzaList.appendChild(pizzaItem);
             });
@@ -995,7 +1013,7 @@
             const button = document.createElement('button');
             button.className = 'weigh-btn';
 
-            if (lastWeighed && isToday(lastWeighed)) {
+            if (lastWeighed && isToday(lastWeighed, pizzaName)) {
                 button.textContent = 'Undo Today';
                 button.classList.add('weighed');
                 item.classList.add('weighed-today');
@@ -1071,12 +1089,14 @@
 
             const lastEntry = history.length > 0 ? history[history.length - 1] : null;
 
-            // 8-hour cooldown window
+            // Cooldown window: 2 minutes for Peoples Pizza, 8 hours for others
             let isUndo = false;
             if (lastEntry) {
                 const lastDate = new Date(lastEntry);
-                const diffHours = (now - lastDate) / (1000 * 60 * 60);
-                if (diffHours < 8) {
+                const diffMs = now - lastDate;
+                const cooldownMs = (pizzaName === "Peoples Pizza") ? (2 * 60 * 1000) : (8 * 60 * 60 * 1000);
+
+                if (diffMs < cooldownMs) {
                     isUndo = true;
                 }
             }
@@ -1128,13 +1148,14 @@
             }
         }
 
-        // Check if a pizza was weighed within the 8-hour cooldown window
-        function isToday(dateString) {
+        // Check if a pizza was weighed within its specific cooldown window
+        function isToday(dateString, pizzaName) {
             if (!dateString) return false;
             const now = new Date();
             const weighedDate = new Date(dateString);
-            const diffHours = (now - weighedDate) / (1000 * 60 * 60);
-            return diffHours < 8;
+            const diffMs = now - weighedDate;
+            const cooldownMs = (pizzaName === "Peoples Pizza") ? (2 * 60 * 1000) : (8 * 60 * 60 * 1000);
+            return diffMs < cooldownMs;
         }
 
         // Check if a pizza is considered "stale" (not weighed in > 7 days)
@@ -1373,7 +1394,8 @@
             const staffData = data[staffName] || {};
 
             list.innerHTML = '';
-            PIZZAS.forEach(pizza => {
+            const activePizzas = getActivePizzas();
+            activePizzas.forEach(pizza => {
                 const history = staffData[pizza] || [];
                 const count = Array.isArray(history) ? history.length : (history ? 1 : 0);
 
